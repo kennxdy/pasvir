@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "pasvir"
+version = "1.0.0"
+description = "Forensic application to create and organize documents about cybercrimes."
+authors = ["Kennedy <okennxdy@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+django = "^4.1.4"
+crispy-bootstrap5 = "^0.7"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

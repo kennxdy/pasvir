@@ -1,0 +1,52 @@
+/* base style */
+
+.bi {
+    vertical-align: -.125em;
+    fill: currentColor;
+}
+
+.dropdown-toggle {
+    outline: 0;
+}
+
+/* Home page */
+.hp-document-title, .hp-auditee-name {
+    color: #6c757d;
+}
+
+/* Wrap line for document description */
+.hp-document-description {
+    display: block;
+    display: -webkit-box;
+    max-width: 25rem;
+    font-size: 20dp;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Documents page */
+.document-title {
+    color: #212529;
+}
+
+/* Wrap line for auditee name */
+.auditee-name {
+    width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Wrap line for document description */
+.document-description {
+    display: block;
+    display: -webkit-box;
+    max-width: 18rem;
+    font-size: 20dp;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

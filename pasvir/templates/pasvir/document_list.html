@@ -1,0 +1,111 @@
+{% extends 'pasvir/base.html' %}
+
+{% block title %}
+    Documents ·
+{% endblock %}
+
+{% block content %}
+    <!-- message from backend -->
+    {% for message in messages %}
+        {% if message.tags == 'success' %}
+            <div class="text-center alert alert-primary alert-dismissible fade show" role="alert">{{message}}
+                <a href="{% url 'pasvir:home' %}" type="button" class="btn btn-close" data-bs-dismiss="alert" arial-label="Close"></a>
+            </div>
+        {% endif %}
+    {% endfor %}
+
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h2>Documents</h2>
+        <a class="btn btn-primary rounded-2 px-4" href="{% url 'pasvir:new_document' %}">New</a>
+    </div>
+
+    <div class="pb-4">
+        Total:
+        <span class="badge text-bg-dark rounded-pill align-text-bottom mx-1">{{ total_documents }}</span>
+    </div>
+
+    <form>
+        <div class="input-group input-group-sm mb-3 mt-4">
+            <input name="q" type="text" class="form-control input-sm" placeholder="Search documents" value="{{ request.GET.q }}">
+            <button class="btn btn-secondary" title="Search">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                </svg>
+            </button>
+            <a href="{% url 'pasvir:documents' %}" class="btn btn-dark" style="margin-left: 2px;" title="Refresh">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+                    <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+                </svg>
+            </a>
+        </div>
+    </form>
+
+    <div class="row">
+    {% for document in page_obj %}
+        <div class="col-md-4 pb-2">
+            <div class="card text-bg-light mb-3 shadow" style="max-width: 23rem; height: 12rem;">
+                <a href="{% url 'pasvir:show_document' document.id %}" class="document-title text-decoration-none">
+                    <div class="card-header">
+                        Document <span>{{ document.id }}</span>
+                    </div>
+                </a>
+                <div class="card-body">
+                    <h6 class="card-title auditee-name">{{ document.auditee.name }}</h6>
+                    <div style="height: 5rem;">
+                        <p class="document-description">{{ document.description }}</p>
+                    </div>
+                    <div>
+                        <span class="text-black-50">Created: {{ document.created_date | date:'d/m/Y' }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+{% endblock %}
+
+{% block pagination %}
+    <div class="">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item">
+                {% if page_obj.has_previous %}
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    </a>
+                    {% if page_obj.number > 3 %}
+                        <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
+                        {% if page_obj.number > 4 %}
+                            <span class="px-3">...</span>
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+                </li>
+
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <li class="page-item active"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                    {% endif %}
+                {% endfor %}
+
+                <li class="page-item">
+                {% if page_obj.has_next %}
+                    {% if page_obj.number < page_obj.paginator.num_pages|add:'-3' %}
+                        <span class="px-3">...</span>
+                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a></li>
+                    {% elif page_obj.number < page_obj.paginator.num_pages|add:'-2' %}
+                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a></li>
+                    {% endif %}
+
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    </a>
+                {% endif %}
+                </li>
+            </ul>
+        </nav>
+    </div>
+{% endblock %}
