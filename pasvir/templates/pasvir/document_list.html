@@ -41,71 +41,75 @@
         </div>
     </form>
 
-    <div class="row">
-    {% for document in page_obj %}
-        <div class="col-md-4 pb-2">
-            <div class="card text-bg-light mb-3 shadow" style="max-width: 23rem; height: 12rem;">
-                <a href="{% url 'pasvir:show_document' document.id %}" class="document-title text-decoration-none">
-                    <div class="card-header">
-                        Document <span>{{ document.id }}</span>
-                    </div>
-                </a>
-                <div class="card-body">
-                    <h6 class="card-title auditee-name">{{ document.auditee.name }}</h6>
-                    <div style="height: 5rem;">
-                        <p class="document-description">{{ document.description }}</p>
-                    </div>
-                    <div>
-                        <span class="text-black-50">Created: {{ document.created_date | date:'d/m/Y' }}</span>
+    <div class="h-100">
+        <div class="row">
+        {% for document in page_obj %}
+            <div class="col-md-4 pb-2">
+                <div class="card text-bg-light mb-3 shadow" style="max-width: 23rem; height: 12rem;">
+                    <a href="{% url 'pasvir:show_document' document.id %}" class="document-title text-decoration-none">
+                        <div class="card-header">
+                            Document <span>{{ document.id }}</span>
+                        </div>
+                    </a>
+                    <div class="card-body">
+                        <h6 class="card-title auditee-name">{{ document.auditee.name }}</h6>
+                        <div style="height: 5rem;">
+                            <p class="document-description">{{ document.description }}</p>
+                        </div>
+                        <div>
+                            <span class="text-black-50">Created: {{ document.created_date | date:'d/m/Y' }}</span>
+                        </div>
                     </div>
                 </div>
             </div>
+        {% endfor %}
         </div>
-    {% endfor %}
     </div>
 {% endblock %}
 
 {% block pagination %}
-    <div class="">
-        <nav aria-label="Page navigation example">
-            <ul class="pagination">
-                <li class="page-item">
-                {% if page_obj.has_previous %}
-                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                    </a>
-                    {% if page_obj.number > 3 %}
-                        <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
-                        {% if page_obj.number > 4 %}
-                            <span class="px-3">...</span>
+    <footer class="footer mt-auto py-4">
+        <div class="container">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li class="page-item">
+                    {% if page_obj.has_previous %}
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        </a>
+                        {% if page_obj.number > 3 %}
+                            <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
+                            {% if page_obj.number > 4 %}
+                                <span class="px-3">...</span>
+                            {% endif %}
                         {% endif %}
                     {% endif %}
-                {% endif %}
-                </li>
+                    </li>
 
-                {% for num in page_obj.paginator.page_range %}
-                    {% if page_obj.number == num %}
-                        <li class="page-item active"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
-                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-                        <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                            <li class="page-item active"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+
+                    <li class="page-item">
+                    {% if page_obj.has_next %}
+                        {% if page_obj.number < page_obj.paginator.num_pages|add:'-3' %}
+                            <span class="px-3">...</span>
+                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a></li>
+                        {% elif page_obj.number < page_obj.paginator.num_pages|add:'-2' %}
+                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a></li>
+                        {% endif %}
+
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        </a>
                     {% endif %}
-                {% endfor %}
-
-                <li class="page-item">
-                {% if page_obj.has_next %}
-                    {% if page_obj.number < page_obj.paginator.num_pages|add:'-3' %}
-                        <span class="px-3">...</span>
-                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a></li>
-                    {% elif page_obj.number < page_obj.paginator.num_pages|add:'-2' %}
-                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a></li>
-                    {% endif %}
-
-                    <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                    </a>
-                {% endif %}
-                </li>
-            </ul>
-        </nav>
-    </div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </footer>
 {% endblock %}
